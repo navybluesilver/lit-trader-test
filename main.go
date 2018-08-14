@@ -33,20 +33,29 @@ func main() {
   waitForFunding()
 
   // buy Forward Contract
-  alice.Buy(1500,1)
+  //alice.Buy(500000,1)
 
   // wait for contract to be send to counterparty
-  delaySecond(5)
+  //delaySecond(5)
 
   // accept all open contracts
-  acceptAllOfferedContracts(bob)
+  //acceptAllOfferedContracts(bob)
+
+  // wait for contract to be accepted
+  //delaySecond(5)
 
   // get all contract info
-  getAllContractInfo(alice)
+  // getAllContractInfo(alice)
+  // getAllContractInfo(bob)
+
+  // SettleExpired Contracts
+  //alice.SettleExpired()
+  //bob.SettleExpired()
 
   // get all contract info
   deleteAllContract(alice)
   deleteAllContract(bob)
+
 }
 
 // Services
@@ -93,8 +102,8 @@ func ping(t *trader.Trader) {
 
 func hasFunding(t *trader.Trader) (hasFunding bool) {
 
-  witnessAddress := getWitnessAddress(t)
-  legacyAddress := getLegacyAddress(t)
+  witnessAddress := t.GetWitnessAddress(t)
+  legacyAddress := t.GetLegacyAddress(t)
 
 
   // confirmed witness funding, return true
@@ -125,18 +134,6 @@ func hasFunding(t *trader.Trader) (hasFunding bool) {
 
 func sweepFunds(t *trader.Trader) {
   t.Lit.Sweep(getWitnessAddress(t),1)
-}
-
-func getLegacyAddress(t *trader.Trader) (pubKey string) {
-  addr, err := t.Lit.GetAddresses(uint32(coinType), 0, true)
-  handleError(err)
-  return addr[0]
-}
-
-func getWitnessAddress(t *trader.Trader) (pubKey string) {
-  addr, err := t.Lit.GetAddresses(uint32(coinType), 0, false)
-  handleError(err)
-  return addr[0]
 }
 
 func getBalance(t *trader.Trader, witness bool) (int) {
